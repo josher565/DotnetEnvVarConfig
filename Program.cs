@@ -19,11 +19,6 @@ namespace DotnetEnvVarConfig
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .ConfigureAppConfiguration((HostingAbstractionsWebHostBuilderExtensions, config) =>
-                {
-                    config.AddEnvironmentVariables();
-                });
+                .UseStartup<Startup>();
     }
 }
-//https://stackoverflow.com/questions/31453495/how-to-read-appsettings-values-from-json-file-in-asp-net-core

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DotnetEnvVarConfig.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace DotnetEnvVarConfig.Controllers
 {
@@ -12,9 +13,9 @@ namespace DotnetEnvVarConfig.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private IOptions<DemoContract> Config { get; set; }
+        private IConfiguration Config { get; set; }
 
-        public ValuesController(IOptions<DemoContract> config){
+        public ValuesController(IConfiguration config){
             Config = config;
         }
         
@@ -22,8 +23,11 @@ namespace DotnetEnvVarConfig.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            string myvar = System.Environment.GetEnvironmentVariable("DEMO_VAR");
-            return new string[] { myvar };
+            var env_vars = new List<string>();
+            foreach(var myvar in Config.GetChildren()){
+                env_vars.Add($"{myvar.Key} : {myvar.Value}");
+            }
+            return env_vars;
         }
 
         // GET api/values/5
